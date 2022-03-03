@@ -17,10 +17,27 @@
     </Window.Resources>
     <Grid>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Content="Close" FontSize="32" Command="{StaticResource CloseApplicationCommand}"></Button>
-        <Grid>
-            <oxy:PlotView Model="{Binding MyModel}">
-                
-            </oxy:PlotView>
-        </Grid>
+        <TabControl>
+            <TabItem Header="График">
+                <oxy:PlotView Model="{Binding MyModel}">
+                </oxy:PlotView>
+            </TabItem>
+            <TabItem Header="Студенты">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Header="Группы">
+                        <ListBox ItemsSource="{Binding Groups}" DisplayMemberPath="Name"></ListBox>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="Студенты">
+                        <DataGrid>
+                            
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

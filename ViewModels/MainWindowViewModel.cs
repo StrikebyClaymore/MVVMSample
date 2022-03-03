@@ -7,14 +7,19 @@ using System;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
+using System.Collections.ObjectModel;
+using MVVMSample.Models.Decanat;
+using System.Linq;
 
 namespace MVVMSample.Views.Windows.ViewModels
-{
+{   
     internal class MainWindowViewModel : WindowBase
     {
+        public ObservableCollection<Group> Groups { get; }
+
         #region Commands
 
-        #region MyRegion
+        #region Close Applicataion Command
 
         public ICommand CloseApplicationCommand { get; set; }
 
@@ -35,6 +40,39 @@ namespace MVVMSample.Views.Windows.ViewModels
 
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
 
+            var student_index = 1;
+            var students = Enumerable.Range(1, 10).Select(i => new Student
+            {
+                Name = $"Name {student_index}",
+                Surname = $"Surname {student_index}",
+                Patronymic = $"Patronymic {student_index}",
+                Birthday = DateTime.Now,
+                Rating = 0,
+            });
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>()
+            });
+            Groups = new ObservableCollection<Group>(groups);
+
+            CreatePlotModel();
+
+
+        }
+
+        #region Test Plot Model
+
+        private IEnumerable<Models.DataPoint> _Points;
+        public IEnumerable<Models.DataPoint> Points
+        {
+            get => _Points;
+            set => Set(ref _Points, value);
+        }
+        public PlotModel MyModel { get; private set; }
+
+        private void CreatePlotModel()
+        {
             var list = new List<Models.DataPoint>();
 
             var dataPoints = new LineSeries();
@@ -48,11 +86,10 @@ namespace MVVMSample.Views.Windows.ViewModels
 
                 //dataPoints.Points.Add(new DataPoint (x, y));
                 list.Add(new Models.DataPoint { X = x, Y = y });
-                DataPoint p;
-
             }
 
             Points = list;
+
             dataPoints.ItemsSource = Points;
 
             var model = new PlotModel { Title = "LineSeries with default style" };
@@ -65,16 +102,8 @@ namespace MVVMSample.Views.Windows.ViewModels
 
             /*this.MyModel = new PlotModel { Title = "Example 1" };
             this.MyModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 360, "cos(x)"));*/
-
-
         }
 
-        private IEnumerable<Models.DataPoint> _Points;
-        public IEnumerable<Models.DataPoint> Points
-        { 
-            get => _Points;
-            set => Set(ref _Points, value);
-        }
-        public PlotModel MyModel { get; private set; }
+        #endregion
     }
 }
