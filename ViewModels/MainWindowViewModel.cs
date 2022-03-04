@@ -18,8 +18,8 @@ namespace MVVMSample.Views.Windows.ViewModels
         public ObservableCollection<Group> Groups { get; }
 
         private Group _SelectedGroup;
-        public Group SelectedGroup 
-        { 
+        public Group SelectedGroup
+        {
             get => _SelectedGroup;
             set => Set(ref _SelectedGroup, value);
         }
@@ -52,15 +52,17 @@ namespace MVVMSample.Views.Windows.ViewModels
             {
                 Name = $"Name {student_index}",
                 Surname = $"Surname {student_index}",
-                Patronymic = $"Patronymic {student_index}",
+                Patronymic = $"Patronymic {student_index++}",
                 Birthday = DateTime.Now,
                 Rating = 0,
             });
+
             var groups = Enumerable.Range(1, 20).Select(i => new Group
             {
                 Name = $"Группа {i}",
-                Students = new ObservableCollection<Student>()
+                Students = new ObservableCollection<Student>(students)
             });
+
             Groups = new ObservableCollection<Group>(groups);
 
             CreatePlotModel();
